@@ -1,7 +1,3 @@
-# !/usr/bin/python
-# vi: fileencoding=latin1
-# coding: latin1
-
 import os
 import sys
 import json
@@ -20,7 +16,7 @@ from log import Log
 from window import WindowFile
 
 # 1. Valida se tem CNPJ repetido;
-# 2. Validar o tempo nencess·rio para a consulta e limitaÁ„oo da api p˙blica.
+# 2. Validar o tempo nencess√°rio para a consulta e limita√ß√£o da api p√∫blica.
 
 # Uso -> https://publica.cnpj.ws/cnpj/cnpj_da_empresa
 API_LINK = "https://publica.cnpj.ws/cnpj/"
@@ -52,18 +48,18 @@ class Main():
         # Envio do email
         destinatarios = [self.user_email]
         conteudo = ""\
-            "Ol·, dado o inicio da geraÁ„o do arquivo cnpj.\n"\
+            "Ol√°, dado o inicio da gera√ß√£oo do arquivo cnpj.\n"\
             "Tempo de espera estimado pela de entrega....: %s\n"\
             "Seu arquivo de backup para caso ocorra algum imprevisto: %s"\
             "" % (str(datetime.timedelta(seconds=(24*len(cnpj_list)))), str(os.path.join(cnpj_path, "cnpj.csv")))
         self.evnia_email(titulo="Inicio da Consulta CNPJ's", conteudo=conteudo, destinatarios=destinatarios)
 
-        # GeraÁ„o do arquivo
+        # Gera√ß√£oo do arquivo
         cnpj_info_retono_list = []
-        self.log.info("Iniciando ValidaÁ„o e busca dos cnpj's")
+        self.log.info("Iniciando Valida√ß√£oo e busca dos cnpj's")
         self.log.info("Tempo de espera estimado em....: %s" % str(datetime.timedelta(seconds=(24*len(cnpj_list)))))
         try:
-            self.log.info("|_____ INÕCIO DAS CONSULTAS _____|")
+            self.log.info("|_____ IN√çCIO DAS CONSULTAS _____|")
             for cnpj in cnpj_list:
                 cnpj_dict = self.consulta_api(cnpj)
                 if cnpj_dict:
@@ -82,18 +78,18 @@ class Main():
             arquivo_backup.close()
 
             conteudo = ""\
-                "Ol·, seu arquivo sobre a consulta dos cnpj's informados j· est· pronto! \n>"\
-                "Consulta localmente em sua m·quina o seguinte endereÁo: %s \n"\
+                "Ol√°, seu arquivo sobre a consulta dos cnpj's informados j√° est√° pronto! \n>"\
+                "Consulta localmente em sua m√°quina o seguinte endere√ßo: %s \n"\
                 "Ou confira o mesmo em anexo.\n>" % str(os.path.join(cnpj_path, "cnpj.csv"))
 
-            self.evnia_email(conteudo, destinatarios, titulo="FinalizaÁ„o EndereÁos", file_path=os.path.join(cnpj_path, "cnpj.csv"))
+            self.evnia_email(conteudo, destinatarios, titulo="Finaliza√ß√£oo Endere√ßos", file_path=os.path.join(cnpj_path, "cnpj.csv"))
 
         except Exception as e:
             conteudo = ""\
-                "Ol·, aparentemente ocorreu algum problema com a consulta de seus cnpj's!\n"\
+                "Ol√°, aparentemente ocorreu algum problema com a consulta de seus cnpj's!\n"\
                 "Confira o seu backup de arquivo localmente em: %s \n"  % str(os.path.join(cnpj_path, "cnpj.csv"))
             self.evnia_email(conteudo, destinatarios)
-            self.log.error("Ocorreu um erro na realizaÁ„o das consultas.")
+            self.log.error("Ocorreu um erro na realiza√ß√£oo das consultas.")
             self.log.error(str(e))
 
         finally:
@@ -102,7 +98,7 @@ class Main():
     def formata_cnpj(self, cnpj):
         '''
          - Objetivo..: Formatar o cnpj
-         - Par‚metro.: cnpj -> string com o cnpj
+         - Par√¢metro.: cnpj -> string com o cnpj
          - Retorno...: String
         '''
         try:
@@ -116,12 +112,12 @@ class Main():
     def consulta_api(self, empresa_cnpj):
         '''
         - Objetivo..: Consulta a empresa na api
-        - Par‚metro.: empresa_cnpj -> inteiro com o cnpj da empresa.
+        - Par√¢metro.: empresa_cnpj -> inteiro com o cnpj da empresa.
         - Retorno...: Dict
         '''
         try:
             self.log.info("+ ------------------------------")
-            self.log.info("+ MÈtodo.: GET")
+            self.log.info("+ M√©todo.: GET")
             self.log.info("+ Path...: %s" % API_LINK + str(empresa_cnpj))
 
             empresa_response = requests.get(API_LINK + str(empresa_cnpj))
@@ -174,19 +170,19 @@ class Main():
 
     def evnia_email(self, titulo="", conteudo="", destinatarios=[], file_path=""):
         '''
-         - Objetivo..: Enviar o email para o usu·rio
-         - Par‚metro.: 
+         - Objetivo..: Enviar o email para o usu√°rio
+         - Par√¢metro.: 
          - Retorno...: Boolean
         '''
         try:
             self.log.info("Enviado email para...: %s." % ", ".join(destinatarios))
-            # ConfiguraÁıes do servidor SMTP
+            # Configura√ß√µes do servidor SMTP
             smtp_server = 'smtp-mail.outlook.com'
             smtp_port = 587
             sender_email = 'smtpdetesteomega@outlook.com'
             sender_password = '$_0()#!@SenhaMuit0Gr@d3!_'
 
-            mail_message = "Subject: Omega - %s\n\n%s" % (titulo or "CNPJ e EndereÁo", conteudo)
+            mail_message = "Subject: Omega - %s\n\n%s" % (titulo or "CNPJ e Endere√ßo", conteudo)
 
             server = smtplib.SMTP(smtp_server, smtp_port)
             server.starttls()
